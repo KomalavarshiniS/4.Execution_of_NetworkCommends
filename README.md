@@ -27,7 +27,7 @@ This commands includes
 <BR>
 
 ## Program
-### Cliwnt.py
+### Client.py
 ```
 import socket
 
