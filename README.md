@@ -35,13 +35,11 @@ s = socket.socket()
 s.connect(('localhost', 8000))
 
 while True:
-    ip = input("Enter the website you want to ping (or 'exit' to quit): ")
-    s.send(ip.encode())
+    ip = input("Enter the website you want to ping (or type 'exit' to quit): ")
+    s.send(ip.encode('utf-8'))
     if ip.lower() == 'exit':
         break
-
-    data = s.recv(1024).decode()
-    print("Ping Result:", data)
+    print(s.recv(4096).decode('utf-8'))
 
 s.close()
 
@@ -51,42 +49,33 @@ s.close()
 import socket
 import os
 
-# Create socket
 s = socket.socket()
 s.bind(('localhost', 8000))
 s.listen(5)
-print("Server is listening...")
+print("Server listening on port 8000...")
 
-# Accept client connection
 c, addr = s.accept()
-print("Connected with:", addr)
+print(f"Connection from {addr}")
 
 while True:
-    hostname = c.recv(1024).decode()
-    if not hostname:
-        break
-    if hostname.lower() == 'exit':
-        print("Client requested to close connection.")
+    hostname = c.recv(1024).decode('utf-8')
+    if not hostname or hostname.lower() == 'exit':
+        print("Client disconnected.")
         break
 
-    print(f"Pinging {hostname} ...")
-
-    # Ping the host (works on Windows; use -c for Linux/Mac)
-    response = os.system(f"ping -n 1 {hostname} > nul")
-
-    if response == 0:
-        c.send(f"{hostname} is reachable ".encode())
-    else:
-        c.send(f"{hostname} is not reachable ".encode())
+    try:
+        # Use system ping command
+        response = os.popen(f"ping -n 4 {hostname}").read()  # Use -c 4 for Linux/Mac
+        c.send(response.encode('utf-8'))
+    except Exception as e:
+        c.send(f"Ping failed: {e}".encode('utf-8'))
 
 c.close()
-s.close()
-
 ```
 ## Output
 ### Client.py
-![alt text](image.png)
+![alt text](image-3.png)
 ### Server.py
-![alt text](image-1.png)
+![alt text](image-2.png)
 ## Result
 Thus Execution of Network commands Performed 
