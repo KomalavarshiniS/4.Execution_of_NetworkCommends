@@ -26,56 +26,37 @@ This commands includes
 • Other IP Commands e.g. show ip route etc.
 <BR>
 
-## Program
-### Client.py
-```
-import socket
+## Output:
+### netstat
+![alt text](<Screenshot (220).png>)
 
-s = socket.socket()
-s.connect(('localhost', 8000))
+### ipconfig
+![alt text](<Screenshot (221).png>)
 
-while True:
-    ip = input("Enter the website you want to ping (or type 'exit' to quit): ")
-    s.send(ip.encode('utf-8'))
-    if ip.lower() == 'exit':
-        break
-    print(s.recv(4096).decode('utf-8'))
+### ping
+![alt text](<Screenshot 2025-11-13 031241.png>)
 
-s.close()
+###  tracert
+![alt text](<Screenshot 2025-11-13 031614.png>)
 
-```
-### Server.py
-```
-import socket
-import os
+### nslookup
+![alt text](<Screenshot 2025-11-13 031753.png>)
 
-s = socket.socket()
-s.bind(('localhost', 8000))
-s.listen(5)
-print("Server listening on port 8000...")
+### getmac
+![alt text](<Screenshot 2025-11-13 031848.png>)
 
-c, addr = s.accept()
-print(f"Connection from {addr}")
 
-while True:
-    hostname = c.recv(1024).decode('utf-8')
-    if not hostname or hostname.lower() == 'exit':
-        print("Client disconnected.")
-        break
+### hostname
+![alt text](<Screenshot 2025-11-13 031904.png>)
 
-    try:
-        # Use system ping command
-        response = os.popen(f"ping -n 4 {hostname}").read()  # Use -c 4 for Linux/Mac
-        c.send(response.encode('utf-8'))
-    except Exception as e:
-        c.send(f"Ping failed: {e}".encode('utf-8'))
+### nbtstat
+![alt text](<Screenshot 2025-11-13 031940.png>)
 
-c.close()
-```
-## Output
-### Client.py
-![alt text](image-3.png)
-### Server.py
-![alt text](image-2.png)
+### arp
+![alt text](<Screenshot 2025-11-13 032020.png>)
+
+### systeminfo
+![alt text](<Screenshot 2025-11-13 032059.png>)
+
 ## Result
 Thus Execution of Network commands Performed 
